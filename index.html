@@ -1,24 +1,28 @@
-<!DOCTYPE html>
-<html lang="en">
+<!-- Audio automático -->
+<audio id="backgroundMusic" autoplay loop style="display: none;">
+  <source src="https://assets.mixkit.co/music/preview/mixkit-deep-urban-623.mp3" type="audio/mpeg">
+</audio>
 
-  <head>
-    <meta charset="UTF-8">
-    <title>01</title>
-    <link rel="stylesheet" href="https://public.codepenassets.com/css/normalize-5.0.0.min.css">
-<link rel="stylesheet" href="./style.css">
+<div id="fluid"></div>
 
-  </head>
-    
-  <body>
-  <div id="fluid"></div>
-
-<div class="grid-container">
+<!-- Primer texto - Visible inicialmente -->
+<div class="grid-container" id="text1">
   <div class="word left-word">Nunca</div>
   <div class="word-group center-group word">
     <span>estás</span>
     <span>Completamente</span>
   </div>
   <div class="word right-word">Solo</div>
+</div>
+
+<!-- Segundo texto - Oculto inicialmente -->
+<div class="grid-container" id="text2" style="opacity: 0; display: none;">
+  <div class="word left-word">Alguien</div>
+  <div class="word-group center-group word">
+    <span>siempre</span>
+    <span>está</span>
+  </div>
+  <div class="word right-word">Contigo</div>
 </div>
 
 <!-- Botón sutil añadido sin afectar nada más -->
@@ -41,6 +45,51 @@
     X →
   </a>
 </div>
+
+<!-- Script para transición y música -->
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const text1 = document.getElementById('text1');
+    const text2 = document.getElementById('text2');
+    // Tiempo en pantalla de cada texto (5 segundos)
+    const displayTime = 5000;
+    // Tiempo de transición (1.5 segundos)
+    const transitionTime = 1500;
+    // Configurar audio
+    const audio = document.getElementById('backgroundMusic');
+    audio.volume = 0.3; // Volumen al 30%
+    // Intentar reproducir audio automáticamente
+    audio.play().catch(e => {
+      console.log("Audio: esperando interacción del usuario");
+    });
+    // Función para transicionar del texto 1 al texto 2
+    function transitionToText2() {
+      // Desvanecer texto 1
+      text1.style.transition = `opacity ${transitionTime}ms ease`;
+      text1.style.opacity = '0';
+      setTimeout(() => {
+        text1.style.display = 'none';
+        // Mostrar texto 2
+        text2.style.display = 'block';
+        text2.style.transition = `opacity ${transitionTime}ms ease`;
+        // Forzar reflow para activar animación
+        void text2.offsetWidth;
+        text2.style.opacity = '1';
+        // Programar desvanecimiento final del texto 2
+        setTimeout(() => {
+          text2.style.transition = `opacity ${transitionTime}ms ease`;
+          text2.style.opacity = '0';
+          // Opcional: ocultar completamente después de desvanecer
+          setTimeout(() => {
+            text2.style.display = 'none';
+          }, transitionTime);
+        }, displayTime); // Tiempo en pantalla del texto 2
+      }, transitionTime); // Tiempo de desvanecimiento del texto 1
+    }
+    // Iniciar transición después del tiempo de pantalla del texto 1
+    setTimeout(transitionToText2, displayTime);
+  });
+</script>
     <script type="module" src="./script.js"></script>
 
   </body>
