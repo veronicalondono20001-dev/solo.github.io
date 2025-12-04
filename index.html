@@ -51,47 +51,55 @@
   document.addEventListener('DOMContentLoaded', function() {
     const text1 = document.getElementById('text1');
     const text2 = document.getElementById('text2');
+    
     // Tiempo en pantalla de cada texto (5 segundos)
     const displayTime = 5000;
     // Tiempo de transición (1.5 segundos)
     const transitionTime = 1500;
+    
     // Configurar audio
     const audio = document.getElementById('backgroundMusic');
     audio.volume = 0.3; // Volumen al 30%
+    
     // Intentar reproducir audio automáticamente
     audio.play().catch(e => {
       console.log("Audio: esperando interacción del usuario");
     });
+    
     // Función para transicionar del texto 1 al texto 2
     function transitionToText2() {
       // Desvanecer texto 1
       text1.style.transition = `opacity ${transitionTime}ms ease`;
       text1.style.opacity = '0';
+      
       setTimeout(() => {
         text1.style.display = 'none';
+        
         // Mostrar texto 2
         text2.style.display = 'block';
         text2.style.transition = `opacity ${transitionTime}ms ease`;
+        
         // Forzar reflow para activar animación
         void text2.offsetWidth;
+        
         text2.style.opacity = '1';
+        
         // Programar desvanecimiento final del texto 2
         setTimeout(() => {
           text2.style.transition = `opacity ${transitionTime}ms ease`;
           text2.style.opacity = '0';
+          
           // Opcional: ocultar completamente después de desvanecer
           setTimeout(() => {
             text2.style.display = 'none';
           }, transitionTime);
+          
         }, displayTime); // Tiempo en pantalla del texto 2
+        
       }, transitionTime); // Tiempo de desvanecimiento del texto 1
     }
+    
     // Iniciar transición después del tiempo de pantalla del texto 1
     setTimeout(transitionToText2, displayTime);
   });
 </script>
-    <script type="module" src="./script.js"></script>
-
-  </body>
-  
-</html>
